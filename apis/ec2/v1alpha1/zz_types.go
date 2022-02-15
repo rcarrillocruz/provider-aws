@@ -871,6 +871,8 @@ type EBSInstanceBlockDevice struct {
 
 	DeleteOnTermination *bool `json:"deleteOnTermination,omitempty"`
 
+	Status *string `json:"status,omitempty"`
+
 	VolumeID *string `json:"volumeID,omitempty"`
 }
 
@@ -1693,6 +1695,8 @@ type InstanceNetworkInterfaceAttachment struct {
 	DeviceIndex *int64 `json:"deviceIndex,omitempty"`
 
 	NetworkCardIndex *int64 `json:"networkCardIndex,omitempty"`
+
+	Status *string `json:"status,omitempty"`
 }
 
 // +kubebuilder:skipversion
@@ -1810,6 +1814,8 @@ type InternetGateway struct {
 
 // +kubebuilder:skipversion
 type InternetGatewayAttachment struct {
+	State *string `json:"state,omitempty"`
+
 	VPCID *string `json:"vpcID,omitempty"`
 }
 
@@ -2581,6 +2587,8 @@ type NetworkInterfaceAttachment struct {
 	InstanceOwnerID *string `json:"instanceOwnerID,omitempty"`
 
 	NetworkCardIndex *int64 `json:"networkCardIndex,omitempty"`
+
+	Status *string `json:"status,omitempty"`
 }
 
 // +kubebuilder:skipversion
@@ -4585,6 +4593,8 @@ type VPC struct {
 
 // +kubebuilder:skipversion
 type VPCAttachment struct {
+	State *string `json:"state,omitempty"`
+
 	VPCID *string `json:"vpcID,omitempty"`
 }
 
@@ -4733,9 +4743,13 @@ type VPNConnection struct {
 
 	CustomerGatewayID *string `json:"customerGatewayID,omitempty"`
 
+	State *string `json:"state,omitempty"`
+
 	Tags []*Tag `json:"tags,omitempty"`
 
 	TransitGatewayID *string `json:"transitGatewayID,omitempty"`
+
+	Type *string `json:"type_,omitempty"`
 
 	VPNConnectionID *string `json:"vpnConnectionID,omitempty"`
 
@@ -4773,12 +4787,18 @@ type VPNConnectionOptionsSpecification struct {
 }
 
 // +kubebuilder:skipversion
-type VPNGateway struct {
+type VPNGateway_SDK struct {
 	AmazonSideASN *int64 `json:"amazonSideASN,omitempty"`
 
 	AvailabilityZone *string `json:"availabilityZone,omitempty"`
 
+	State *string `json:"state,omitempty"`
+
 	Tags []*Tag `json:"tags,omitempty"`
+
+	Type *string `json:"type_,omitempty"`
+
+	VPCAttachments []*VPCAttachment `json:"vpcAttachments,omitempty"`
 
 	VPNGatewayID *string `json:"vpnGatewayID,omitempty"`
 }
@@ -4786,6 +4806,8 @@ type VPNGateway struct {
 // +kubebuilder:skipversion
 type VPNStaticRoute struct {
 	DestinationCIDRBlock *string `json:"destinationCIDRBlock,omitempty"`
+
+	State *string `json:"state,omitempty"`
 }
 
 // +kubebuilder:skipversion

@@ -1,0 +1,231 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+  creationTimestamp: null
+  name: vpngateways.ec2.aws.crossplane.io
+spec:
+  group: ec2.aws.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - aws
+    kind: VPNGateway
+    listKind: VPNGatewayList
+    plural: vpngateways
+    singular: vpngateway
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: VPNGateway is the Schema for the VPNGateways API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: VPNGatewaySpec defines the desired state of VPNGateway
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: DeletionPolicy specifies what will happen to the underlying
+                  external when this managed resource is deleted - either "Delete"
+                  or "Orphan" the external resource.
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                description: VPNGatewayParameters defines the desired state of VPNGateway
+                properties:
+                  amazonSideASN:
+                    description: "A private Autonomous System Number (ASN) for the
+                      Amazon side of a BGP session. If you're using a 16-bit ASN,
+                      it must be in the 64512 to 65534 range. If you're using a 32-bit
+                      ASN, it must be in the 4200000000 to 4294967294 range. \n Default:
+                      64512"
+                    format: int64
+                    type: integer
+                  availabilityZone:
+                    description: The Availability Zone for the virtual private gateway.
+                    type: string
+                  dryRun:
+                    description: Checks whether you have the required permissions
+                      for the action, without actually making the request, and provides
+                      an error response. If you have the required permissions, the
+                      error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.
+                    type: boolean
+                  region:
+                    description: Region is which region the VPNGateway will be created.
+                    type: string
+                  tagSpecifications:
+                    description: The tags to apply to the virtual private gateway.
+                    items:
+                      properties:
+                        resourceType:
+                          type: string
+                        tags:
+                          items:
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  type_:
+                    description: The type of VPN connection this virtual private gateway
+                      supports.
+                    type: string
+                required:
+                - region
+                - type_
+                type: object
+              providerConfigRef:
+                default:
+                  name: default
+                description: ProviderConfigReference specifies how the provider that
+                  will be used to create, observe, update, and delete this managed
+                  resource should be configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+              providerRef:
+                description: 'ProviderReference specifies the provider that will be
+                  used to create, observe, update, and delete this managed resource.
+                  Deprecated: Please use ProviderConfigReference, i.e. `providerConfigRef`'
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: WriteConnectionSecretToReference specifies the namespace
+                  and name of a Secret to which any connection details for this managed
+                  resource should be written. Connection details frequently include
+                  the endpoint, username, and password required to connect to the
+                  managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+          status:
+            description: VPNGatewayStatus defines the observed state of VPNGateway.
+            properties:
+              atProvider:
+                description: VPNGatewayObservation defines the observed state of VPNGateway
+                properties:
+                  state:
+                    description: The current state of the virtual private gateway.
+                    type: string
+                  tags:
+                    description: Any tags assigned to the virtual private gateway.
+                    items:
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      type: object
+                    type: array
+                  vpcAttachments:
+                    description: Any VPCs attached to the virtual private gateway.
+                    items:
+                      properties:
+                        state:
+                          type: string
+                        vpcID:
+                          type: string
+                      type: object
+                    type: array
+                  vpnGatewayID:
+                    description: The ID of the virtual private gateway.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time this condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A Message containing details about this condition's
+                        last transition from one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: Type of this condition. At most one of each condition
+                        type may apply to a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

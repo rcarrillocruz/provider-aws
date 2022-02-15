@@ -47,7 +47,6 @@ ignore:
     - VpcCidrBlock
     - VpnConnectionRoute
     - VpnConnection
-    - VpnGateway
   shape_names:
     - Instance
   field_paths:

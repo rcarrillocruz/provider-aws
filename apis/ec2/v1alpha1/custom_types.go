@@ -437,3 +437,7 @@ type CustomTransitGatewayRouteTableParameters struct {
 	// +optional
 	Tags []Tag `json:"tags,omitempty"`
 }
+
+// CustomVPNGateway are custom parameters for VPNGatewayParameters
+type CustomVPNGatewayParameters struct {
+}
